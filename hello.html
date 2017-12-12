@@ -9,18 +9,79 @@
          <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.1.0/umd/react-dom.development.js"></script>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
          <script type="text/babel">
-            class Greeting extends React.Component {
-              render(){
-                return (
-                  <div>
-                      <h1>Hello, my name is Kelsey!</h1>
-                  </div>
-                );
-              }
+
+         class Greeting extends React.Component {
+           constructor(props) {
+              super(props);
+              this.state = {
+                date: new Date(),
+                tick: 0
+              };
             }
-            ReactDOM.render(
-              <Greeting />, document.getElementById('app')
-            );
+            componentDidMount() {
+               this.timerID = setInterval(
+                 () => this.tick(),
+                 1000
+               );
+             }
+
+             componentWillUnmount() {
+               clearInterval(this.timerID);
+             }
+
+             tick() {
+               this.setState({
+                 date: new Date()
+               });
+               this.counter(this.state.tick);
+             }
+             counter(count) {
+                const counter = count + 1
+                this.setState({
+                    tick: counter
+                })
+                //console.log(counter)
+            }
+
+           render(){
+             return (
+               <div>
+                   <h1>Hello, {this.props.user.name}!</h1>
+                   <User user={this.props.user}/>
+                   <p>
+                      Time on page: {this.state.tick}
+                   </p>
+                   <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+               </div>
+             );
+           }
+         }
+
+         function User(props){
+           return(
+             <div>
+               <img src={props.user.avatarUrl}/>
+
+             </div>
+           )
+         }
+         const userInfo = {
+           date: new Date(),
+           text:
+             'I hope you enjoy learning React!',
+           user: {
+             name: 'Kelsey',
+             avatarUrl:
+               'http://placekitten.com/g/64/64',
+           },
+         };
+         ReactDOM.render(
+           <Greeting
+               memo={userInfo.text}
+               user={userInfo.user}
+           />, document.getElementById('app')
+         );
+
          </script>
   </body>
 </html>
